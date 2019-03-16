@@ -1,0 +1,32 @@
+<!DOCTYPE html >
+<html ng-app="myApp">
+<head>
+	<title>Messaging App</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.7/angular-route.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.7.7/angular-resource.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+<body >
+	<header>
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">Slack Copy</a>
+				</div>
+				<ul id="menu" class="nav navbar-nav navbar-right">
+					<li id="signup"><a href="#!signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+					<li id="sign"><a href="#!signin"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+	<main class="container-fluid" ng-view></main>
+</body>
+</html>

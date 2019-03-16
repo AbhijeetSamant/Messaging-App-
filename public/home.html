@@ -1,0 +1,27 @@
+<div ng-controller="home">
+	<div id="aside" class="col-xs-2" style="height:650px; background-color:#333333ab; padding: 2px;" ng-init="showUser()">
+		<div >
+			<ul id="Users" class="list-group" style="list-style-type: none; padding: 0px;">
+				<li ng-repeat="x in allUser" class="list-group-item" ng-click="setUserid($index)" > {{x.name}} </li>
+			</ul>
+		</div>
+		<div id="Groups"></div>
+	</div>
+	<div id="main" class="col-xs-10" style="height:650px; background-color:aliceblue;"  ng-model="mgg">
+		{{ mgg }}
+
+	</div>
+	<div id="footer" style="margin-top: 15px;" class="col-xs-12">
+		<form>
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Message" ng-model="msg">
+				<div class="input-group-btn">
+					<button class="btn btn-default" ng-click="sendData()">
+						Send
+					</button>{{msg}}
+				</div>
+			</div>
+		</form>
+	</div>
+
+</div>

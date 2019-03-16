@@ -1,0 +1,163 @@
+var app = angular.module('myApp', ['ngRoute','ngResource']);
+
+
+app.service('SuperService', function() {
+	var user;
+	// var allUser;
+	// var new_message;
+	var id;
+
+	//User Function
+
+	var addUser = function(x){
+		id = x.id;
+		user=x;
+	};
+
+	var getUser = function(){
+		return user;
+	};
+
+	var getid = function(){
+		return id;
+	};
+
+	return {
+		getid: getid,
+		addUser: addUser,
+		getUser: getUser
+	};
+});
+
+
+
+
+
+
+
+app.controller('signup', function($scope , $http) {
+	$scope.user = {};
+
+	$scope.sendData = function() {
+		$http({
+			method  : 'POST',
+			url     : 'http://localhost:3000/users.json',
+			data    : $scope.user,
+			headers : { 'Content-Type': 'application/json' } 
+		})
+		.then(function(data) {
+			if (data.errors) {
+				$scope.errorName = data.errors.name;
+				$scope.errorUserName = data.errors.username;
+				$scope.errorEmail = data.errors.email;
+			} else {
+				$scope.message = data.status;
+				if($scope.message == 201){
+					$scope.msg = "User created successfully"
+					window.open("http://localhost:3000/","_self");
+				}
+				else
+					$scope.msg = "User not created"
+			}
+		});
+	};
+});
+
+app.controller('signin', function($scope , $http , SuperService ) {
+	$scope.user = {};
+	$scope.sendData = function() {
+		console.log($scope.user);
+		$http({
+			method  : 'POST',
+			url     : 'http://localhost:3000/login',
+			data    : $scope.user,
+			headers : { 'Content-Type': 'application/json', 'charset':'utf-8' } 
+		})
+		.then(function(data) {
+			$scope.message = data.data;
+			console.log($scope.message);
+			SuperService.addUser($scope.message);
+			if($scope.message!="202"){
+				$scope.msg = "User signin successfully";
+				$("#signup").empty();
+				$("#signup").append("<a href=\"#!home\"><span class=\"glyphicon glyphicon-home\"></span> Home</a>");
+				$("#sign").empty();
+				$("#sign").append("<a href=\"http://localhost:3000\"><span class=\"glyphicon glyphicon-home\"></span> Log out</a>");
+				window.open("http://localhost:3000/#!/account","_self");
+			}
+			else
+				$scope.msg = "User not loged in"
+		});
+	};
+	
+	
+
+});
+
+app.controller('account', function($scope , $http ,SuperService) {
+	$scope.user = {};
+	$scope.id = {};
+	// $('#menu').append("<li id="hom"><a href="#!home"><span class="glyphicon glyphicon-home"></span> Home</a></li>");
+	// $('#menu').append("<li id="hom"><a href="#!signin"><span class="glyphicon glyphicon-home"></span> S</a></li>");
+	$scope.user = SuperService.getUser();
+	$scope.id = $scope.user.id;
+	$scope.update = function() {
+		$http({
+			method  : 'PUT',
+			url     : 'http://localhost:3000/users/'+$scope.id+'.json',
+			data    : $scope.user,
+			headers : { 'Content-Type': 'application/json' } 
+		})
+		.then(function(data) {
+			if (data.errors) {
+				$scope.errorName = data.errors.name;
+				$scope.errorUserName = data.errors.username;
+				$scope.errorEmail = data.errors.email;
+			} else {
+				$scope.message = data.data;
+				console.log($scope.message);
+			}
+		});
+	};
+
+	$scope.destroy = function() {
+		$http({
+			method  : 'DELETE',
+			url     : 'http://localhost:3000/users/'+$scope.id+'.json',
+			data    : $scope.user,
+			headers : { 'Content-Type': 'application/json' } 
+		})
+		.then(function(data) {
+			if (data.errors) {
+				$scope.errorName = data.errors.name;
+				$scope.errorUserName = data.errors.username;
+				$scope.errorEmail = data.errors.email;
+			} else {
+				$scope.message = data.data;
+				console.log($scope.message);
+				UserService.addId($scope.message);
+			}
+		});
+	};
+});
+
+
+
+
+
+app.config(function($routeProvider) {
+	$routeProvider
+	.when("/signup", {
+		templateUrl : '<%= asset_path("signup.html") %>'
+	})
+	.when("/signin", {
+		templateUrl : '<%= asset_path("signin.html") %>'
+	})
+	.when("/account", {
+		templateUrl : '<%= asset_path("account.html") %>'
+	})
+	.when("/home", {
+		templateUrl : '<%= asset_path("home.html") %>',
+	})
+	
+});
